@@ -11,3 +11,10 @@ type Operation struct {
 	Catalog   *Catalog        `json:"catalog,omitempty"`
 	Timestamp time.Time       `json:"timestamp"`
 }
+
+const (
+	OperationTypeCatalogs OperationType = "catalogs"
+
+	OperationMethodUpsert OperationMethod = "upsert"
+	OperationMethodDelete OperationMethod = "delete"
+)

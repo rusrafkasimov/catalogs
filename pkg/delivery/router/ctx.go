@@ -24,9 +24,9 @@ type ApplicationContext struct {
 	CatalogsController *controllers.CatalogsController
 }
 
-func BuildRepositoryContext(mgo *mongo.Client, ctx context.Context, eq queue.EventQueue) *RepositoryContext {
+func BuildRepositoryContext(mgo *mongo.Client, ctx context.Context, eq queue.EventQueue, logger promtail.Client) *RepositoryContext {
 	return &RepositoryContext{
-		CatalogRep: repository.NewCatalogsRepository(mgo, eq),
+		CatalogRep: repository.NewCatalogsRepository(mgo, eq, logger),
 		CatalogMem: memstore.NewMemStore(ctx),
 	}
 }

@@ -69,7 +69,7 @@ func (c *CatalogsUC) GetCatalogs(ctx context.Context, request *dto.CatalogsReque
 	defer useCaseSpan.Finish()
 	var result dto.GetCatalogsResponse
 
-	documents, ok := c.store.GetRefsByCategoryAndQuery(request.Category, request.Query, request.Sorted)
+	documents, ok := c.store.GetCatalogByCategoryAndQuery(request.Category, request.Query, request.Sorted)
 	if !ok {
 		trace.OnError(c.logger, useCaseSpan, errors.New("memstore is empty"))
 		return &result, errors.New("memstore is empty")

@@ -14,7 +14,7 @@ type MemStore interface {
 	GetCatalog(id string) (*models.Catalog, bool)
 	GetCatalogs(ids []string, sorted bool) []*models.Catalog
 	GetCategories() []string
-	GetRefsByCategoryAndQuery(category string, query string, sorted bool) ([]*models.Catalog, bool)
+	GetCatalogByCategoryAndQuery(category string, query string, sorted bool) ([]*models.Catalog, bool)
 	RemoveCatalog(id string)
 }
 

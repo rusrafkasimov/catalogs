@@ -13,7 +13,7 @@ type mgoDB struct {
 	Client *mongo.Client
 }
 
-func InitMongo(ctx context.Context, log promtail.Client, config *config.Configuration) (*mgoDB, error) {
+func InitDatabase(ctx context.Context, log promtail.Client, config *config.Configuration) (*mgoDB, error) {
 	MongoHost, err := config.Get("MONGO_HOST")
 	if err != nil || MongoHost == ""{
 		log.Errorf("Error: can't parse mongo host. %s", err.Error())

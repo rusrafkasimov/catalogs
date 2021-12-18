@@ -16,6 +16,19 @@ import (
 	"time"
 )
 
+// @title Swagger Catalogs Service
+// @version 0.1
+// @description Catalogs Microservice (Golang)
+
+// @contact.name Ruslan Kasimov
+
+// @host 127.0.0.1:8091
+// @BasePath /
+
+// @securityDefinitions.apikey TokenJWT
+// @in header
+// @name Authorization
+
 const (
 	Name           = "Catalogs"
 	contextKeyName = "Name"

@@ -13,4 +13,4 @@ type CatalogsRequest struct {
 	Category string `query:"category" json:"category" validate:"required"`
 	Query    string `query:"query" json:"query"`
 	Sorted   bool   `query:"sorted" json:"sorted" default:"true"`
-}
+}// @Name CatalogsRequest

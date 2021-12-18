@@ -1,0 +1,350 @@
+basePath: /
+definitions:
+  CatalogRequest:
+    properties:
+      active:
+        type: boolean
+      category:
+        type: string
+      desc:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      value:
+        type: string
+    type: object
+  CatalogResponse:
+    properties:
+      active:
+        type: boolean
+      category:
+        type: string
+      desc:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      value:
+        type: string
+    type: object
+  CatalogsRequest:
+    properties:
+      category:
+        type: string
+      query:
+        type: string
+      sorted:
+        default: true
+        type: boolean
+    required:
+    - category
+    type: object
+  DeleteCatalogResponse:
+    properties:
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+      payload:
+        properties:
+          active:
+            type: boolean
+        type: object
+    type: object
+  Error:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  GetCatalogResponse:
+    properties:
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+      payload:
+        properties:
+          active:
+            type: boolean
+          category:
+            type: string
+          desc:
+            type: string
+          id:
+            type: string
+          name:
+            type: string
+          value:
+            type: string
+        type: object
+    type: object
+  GetCatalogsResponse:
+    properties:
+      meta:
+        $ref: '#/definitions/ResponseMetaList'
+      payload:
+        items:
+          $ref: '#/definitions/CatalogResponse'
+        type: array
+    type: object
+  GetCategoriesResponse:
+    properties:
+      meta:
+        $ref: '#/definitions/ResponseMetaList'
+      payload:
+        items:
+          type: string
+        type: array
+    type: object
+  ResponseMeta:
+    type: object
+  ResponseMetaList:
+    properties:
+      current_page:
+        type: integer
+      node_id:
+        type: string
+      num_of_pages:
+        type: integer
+      num_of_results:
+        type: integer
+      page_size:
+        type: integer
+    type: object
+  UpdateCatalogResponse:
+    properties:
+      meta:
+        $ref: '#/definitions/ResponseMeta'
+      payload:
+        properties:
+          active:
+            type: boolean
+          category:
+            type: string
+          desc:
+            type: string
+          id:
+            type: string
+          name:
+            type: string
+          value:
+            type: string
+        type: object
+    type: object
+host: 127.0.0.1:8091
+info:
+  contact:
+    name: Ruslan Kasimov
+  description: Catalogs Microservice (Golang)
+  title: Swagger Catalogs Service
+  version: "0.1"
+paths:
+  /catalog:
+    get:
+      description: Get JSON CatalogsRequest, return JSON GetCatalogsResponse
+      parameters:
+      - description: Catalogs
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/CatalogsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetCatalogsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - TokenJWT: []
+      summary: Get catalogs
+      tags:
+      - Catalog
+    post:
+      description: Get JSON CatalogRequest, return JSON CreateCatalogResponse
+      parameters:
+      - description: Catalog
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/CatalogRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/CatalogRequest'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - TokenJWT: []
+      summary: Create catalog
+      tags:
+      - Catalog
+    put:
+      description: Get JSON CatalogRequest, return JSON UpdateCatalogResponse
+      parameters:
+      - description: Catalog
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/CatalogRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/UpdateCatalogResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - TokenJWT: []
+      summary: Update catalog
+      tags:
+      - Catalog
+  /catalog/:id:
+    delete:
+      description: Get id from path, return JSON DeleteCatalogResponse
+      parameters:
+      - description: Catalog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/DeleteCatalogResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - TokenJWT: []
+      summary: Delete catalog
+      tags:
+      - Catalog
+    get:
+      description: Get id in path, return JSON GetCatalogResponse
+      parameters:
+      - description: Catalog ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetCatalogResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - TokenJWT: []
+      summary: Get catalog by ID
+      tags:
+      - Catalog
+  /categories:
+    get:
+      description: Return JSON GetCategoriesResponse
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/GetCategoriesResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/Error'
+      security:
+      - TokenJWT: []
+      summary: Get categories
+      tags:
+      - Catalog
+  /health:
+    get:
+      description: Return answer from server for checking what server is stay alive
+      operationId: health-check
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - system
+  /ping:
+    get:
+      description: Just ping-pong endpoint, can be used as health indicator
+      operationId: ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Ping
+      tags:
+      - testing
+securityDefinitions:
+  TokenJWT:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -9,7 +9,7 @@ type CatalogResponse struct {
 	Name     string `json:"name"`
 	Desc     string `json:"desc"`
 	Value    string `json:"value"`
-} // @Name CatalogRequest
+} // @Name CatalogResponse
 
 type CreateCatalogResponse struct {
 	Payload struct {

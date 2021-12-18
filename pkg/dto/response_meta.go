@@ -9,4 +9,4 @@ type ResponseMetaList struct {
 } // @Name ResponseMetaList
 
 type ResponseMeta struct {
-}
+} // @Name ResponseMeta

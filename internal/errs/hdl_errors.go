@@ -2,8 +2,10 @@ package errs
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/rusrafkasimov/history/internal/types"
-	"github.com/rusrafkasimov/history/pkg/dto"
+	"github.com/rusrafkasimov/catalogs/internal/types"
+	"github.com/rusrafkasimov/catalogs/pkg/dto"
+
+
 )
 
 func ErrorHandler(c *gin.Context, err types.ErrorWithCode) {

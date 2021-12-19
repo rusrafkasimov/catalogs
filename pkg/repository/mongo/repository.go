@@ -47,6 +47,7 @@ func (m *CatalogsRepo) CreateCatalog(ctx context.Context, model *models.Catalog,
 	model.ID = primitive.NewObjectID()
 	_, err := m.collection.InsertOne(ctx, model)
 	if err != nil {
+		trace.OnError(m.logger, repoSpan, err)
 		return nil, err
 	}
 
@@ -57,6 +58,7 @@ func (m *CatalogsRepo) CreateCatalog(ctx context.Context, model *models.Catalog,
 	}
 
 	if err = m.eventQueue.Publish(op); err != nil {
+		trace.OnError(m.logger, repoSpan, err)
 		return nil, err
 	}
 
@@ -71,6 +73,7 @@ func (m *CatalogsRepo) FindCatalogByID(ctx context.Context, id primitive.ObjectI
 	var newDocument *models.Catalog
 	err := m.collection.FindOne(ctx, bson.D{{"_id", id}}).Decode(&newDocument)
 	if err != nil {
+		trace.OnError(m.logger, repoSpan, err)
 		return nil, err
 	}
 
@@ -84,6 +87,7 @@ func (m *CatalogsRepo) FindCatalogsByCategory(ctx context.Context, category stri
 
 	documents, err := m.collection.Find(ctx, bson.D{})
 	if err != nil {
+		trace.OnError(m.logger, repoSpan, err)
 		return nil, err
 	}
 
@@ -104,6 +108,7 @@ func (m *CatalogsRepo) FindCatalogsCategories(ctx context.Context, span opentrac
 
 	docs, err := m.collection.Aggregate(ctx, mongo.Pipeline{groupStage})
 	if err != nil {
+		trace.OnError(m.logger, repoSpan, err)
 		return categories, err
 	}
 
@@ -115,6 +120,7 @@ func (m *CatalogsRepo) FindCatalogsCategories(ctx context.Context, span opentrac
 	for _, v := range categoriesRows {
 		value, ok := v["_id"]
 		if ok {
+			trace.OnError(m.logger, repoSpan, err)
 			categories = append(categories, value.(string))
 
 		}
@@ -132,10 +138,12 @@ func (m *CatalogsRepo) UpdateCatalog(ctx context.Context, id string, model *mode
 	model.ID = updatedId
 	res, err := m.collection.ReplaceOne(ctx, bson.M{"_id": updatedId}, model)
 	if err != nil {
+		trace.OnError(m.logger, repoSpan, err)
 		return nil, fmt.Errorf("failed to replace one: %w", err)
 	}
 
 	if res.MatchedCount == 0 {
+		trace.OnError(m.logger, repoSpan, err)
 		return nil, fmt.Errorf("not found record replace one: %w", err)
 	}
 
@@ -145,6 +153,7 @@ func (m *CatalogsRepo) UpdateCatalog(ctx context.Context, id string, model *mode
 		Catalog: model,
 	}
 	if err = m.eventQueue.Publish(op); err != nil {
+		trace.OnError(m.logger, repoSpan, err)
 		return nil, err
 	}
 
@@ -166,13 +175,13 @@ func (m *CatalogsRepo) DeleteCatalog(ctx context.Context, id string, span opentr
 
 	result := m.collection.FindOneAndUpdate(ctx, bson.D{{"_id", deletedId}}, update)
 	if result.Err() != nil {
-		trace.OnError(m.logger, span, result.Err())
+		trace.OnError(m.logger, repoSpan, result.Err())
 		return false
 	}
 
 	err := result.Decode(&newDocument)
 	if err != nil {
-		trace.OnError(m.logger, span, err)
+		trace.OnError(m.logger, repoSpan, err)
 		return false
 	}
 
@@ -185,7 +194,7 @@ func (m *CatalogsRepo) DeleteCatalog(ctx context.Context, id string, span opentr
 	}
 
 	if err := m.eventQueue.Publish(op); err != nil {
-		trace.OnError(m.logger, span, err)
+		trace.OnError(m.logger, repoSpan, err)
 		return false
 	}
 

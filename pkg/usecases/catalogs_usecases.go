@@ -57,7 +57,7 @@ func (c *CatalogsUC) CreateCatalog(ctx context.Context, request *dto.CatalogRequ
 
 	err = mapstructure.Decode(model, &result.Payload)
 	if err != nil {
-		c.logger.Errorf(err.Error())
+		trace.OnError(c.logger, useCaseSpan, err)
 		return &result, err
 	}
 	return &result, nil
@@ -109,6 +109,7 @@ func (c *CatalogsUC) GetCatalogByID(ctx context.Context, id string, span opentra
 
 	media, ok := c.store.GetCatalog(id)
 	if !ok {
+		trace.OnError(c.logger, useCaseSpan, errors.New("memstore error"))
 		return nil, errors.New("not found")
 	}
 
@@ -142,7 +143,7 @@ func (c *CatalogsUC) UpdateCatalogByID(ctx context.Context, request *dto.Catalog
 
 	err = mapstructure.Decode(model, &result.Payload)
 	if err != nil {
-		c.logger.Errorf(err.Error())
+		trace.OnError(c.logger, useCaseSpan, err)
 		return &result, err
 	}
 

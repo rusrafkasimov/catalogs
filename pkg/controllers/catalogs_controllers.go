@@ -156,7 +156,7 @@ func (cc *CatalogsController) GetCatalogByID(c *gin.Context) {
 	catalogResponse, err := cc.catalogsUC.GetCatalogByID(ctx, id, controllerSpan)
 	if err != nil {
 		trace.OnError(cc.logger, controllerSpan, err)
-		errs.ErrorHandler(c, err)
+		errs.ErrorHandler(c, errs.NewInternalServerError(err.Error()))
 		return
 	}
 
@@ -191,7 +191,7 @@ func (cc *CatalogsController) UpdateCatalog(c *gin.Context) {
 	catalogResponse, err := cc.catalogsUC.UpdateCatalogByID(ctx, catalogDto, controllerSpan)
 	if err != nil {
 		trace.OnError(cc.logger, controllerSpan, err)
-		errs.ErrorHandler(c, err)
+		errs.ErrorHandler(c, errs.NewInternalServerError(err.Error()))
 		return
 	}
 
@@ -226,7 +226,7 @@ func (cc *CatalogsController) DeleteCatalog(c *gin.Context) {
 	catalogResponse, err := cc.catalogsUC.DeleteCatalogByID(ctx, id, controllerSpan)
 	if err != nil {
 		trace.OnError(cc.logger, controllerSpan, err)
-		errs.ErrorHandler(c, err)
+		errs.ErrorHandler(c, errs.NewInternalServerError(err.Error()))
 		return
 	}
 
